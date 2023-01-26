@@ -98,13 +98,13 @@
 	    <repository>
 	      <id>nexus</id>
 	      <name>Ashok Technologies Releases Nexus Repository</name>
-	      <url>http://http://13.233.92.105/:8081/repository/wallmart-release/</url>
+	      <url>http://http://172.31.41.190/:8081/repository/wallmart-release/</url>
 	    </repository>
 	    
 	    <snapshotRepository>
 	      <id>nexus</id>
 	      <name>Ashok Technologies Snapshot Nexus Repository </name>
-		    <url>http://http://13.233.92.105/:8081/repository/wallmart-snapshot/</url>
+		    <url>http://http://172.31.41.190/:8081/repository/wallmart-snapshot/</url>
 	    </snapshotRepository>
 	    
 	</distributionManagement>

@@ -1,0 +1,34 @@
+node 
+{
+def mavenHome = tool name: "maven3.8.7"
+properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
+
+echo "The job name is: ${env.JOB_NAME}"
+echo "The node name is: ${env.NODE_NAME}"
+echo "The build number is: ${env.BUILD_NUMBER}"
+echo "The Workspace path is: ${env.WORKSPACE}"
+echo "The node lable is: ${env.NODE_LABELS}"
+
+stage('checkoutcode'){
+git credentialsId: 'b15aaeac-ec99-496d-be5f-2ccf3eac7ea5', url: 'https://github.com/ashok9908/maven-web-application.git'
+}
+
+stage('buildcode'){
+sh "${mavenHome}/bin/mvn clean package"
+}
+
+stage('SonarqubeReport'){
+sh "${mavenHome}/bin/mvn clean sonar:sonar"
+}
+
+stage('artifactstorage'){
+sh "${mavenHome}/bin/mvn clean deploy"
+}
+
+stage('Appdeployment'){
+sshagent(['94542fee-d7ba-44b4-8e5e-38e1580dd84a']) {
+sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@15.206.189.135:/opt/apache-tomcat-9.0.71/webapps"
+}
+}
+
+}

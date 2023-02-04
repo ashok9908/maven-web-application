@@ -3,11 +3,11 @@ node
 def mavenHome = tool name: "maven3.8.7"
 properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])])
 
-echo "The job name is: {env.JOB_NAME}"
-echo "The node name is: {env.NODE_NAME}"
-echo "The workspace name is: {env.WORKSPACE}"
-echo "The node lable is: {env.NODE_LABELS}"
-echo "The Build numberv is: {BUILD_NUMBER}"
+echo "The job name is: ${env.JOB_NAME}"
+echo "The node name is: ${env.NODE_NAME}"
+echo "The Workspace path is: ${env.WORKSPACE}"
+echo "The node lable is: ${env.NODE_LABELS}"
+echo "The Build number is: ${env.BUILD_NUMBER}"
   
 stage('checkoutcode'){
 git credentialsId: 'b15aaeac-ec99-496d-be5f-2ccf3eac7ea5', url: 'https://github.com/ashok9908/maven-web-application.git'

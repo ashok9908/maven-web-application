@@ -8,6 +8,7 @@ echo "The node name is: ${env.NODE_NAME}"
 echo "The node lable is: ${env.NODE_LABELS}"
 echo "The workspace name is: ${env.WORKSPACE}"
 try
+slacknotification=("STARTED")
 { 
 stage('checkoutcode'){
 git credentialsId: 'b15aaeac-ec99-496d-be5f-2ccf3eac7ea5', url: 'https://github.com/ashok9908/maven-web-application.git'

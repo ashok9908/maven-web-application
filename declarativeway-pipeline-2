@@ -6,6 +6,10 @@ parameters {
   choice choices: ['master', 'development', 'qa'], description: 'Branch Creation', name: 'BuildName'
 }
 
+tools{
+maven "maven3.8.7"
+}
+
 triggers {
   pollSCM ('* * * * *')
   cron ('* * * * *')
@@ -13,15 +17,9 @@ triggers {
  
 
 options {
-  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
   timestamps()
-}
-
-
-
-tools{
-maven "maven3.8.7"
-}
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
+  }
 
 stages{
 

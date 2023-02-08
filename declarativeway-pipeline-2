@@ -1,0 +1,106 @@
+pipeline{
+
+agent any
+
+triggers {
+  pollSCM ('* * * * *')
+  cron ('* * * * *')
+}
+ 
+
+options {
+  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
+  timestamps()
+}
+
+
+tools{
+maven "maven3.8.7"
+}
+
+stages{
+
+//Getting code from Github
+stage('Checkout code'){
+steps{
+slacknotifications("STARTED")
+git credentialsId: 'b15aaeac-ec99-496d-be5f-2ccf3eac7ea5', url: 'https://github.com/ashok9908/maven-web-application.git'
+}
+}
+
+//Build The code
+stage('mavenbuild'){
+steps{
+sh "mvn clean package"
+}
+}
+
+//SonarQubeScan Report
+
+stage('SonarQubeScanReport'){
+steps{
+sh "mvn clean sonar:sonar"
+}
+}
+
+//UploadArtifacts
+
+stage('UploadArtifacts to Nexus'){
+steps{
+sh "mvn clean deploy"
+}
+}
+
+//DeployApplication into Tomcat
+
+stage('DeployApplicationTomcat'){
+steps{
+sshagent(['94542fee-d7ba-44b4-8e5e-38e1580dd84a']) {
+sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war  ec2-user@13.126.210.245:/opt/apache-tomcat-9.0.71/webapps"
+}
+}
+
+}
+
+
+
+}//stages closing
+
+post {
+  success {
+  slacknotifications('currentBuild.result')
+  }
+  failure {
+  slacknotifications('currentBuild.result')
+  }
+}
+
+
+
+}//pipeline closing
+
+def slacknotifications(String buildStatus = 'STARTED') {
+
+  buildStatus =  buildStatus ?: 'SUCCESSFUL'    
+
+  // Default values
+  def colorName = 'RED'
+  def colorCode = '#FF0000'
+  def subject = "${buildStatus}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'"
+  def summary = "${subject} (${env.BUILD_URL})"
+
+  // Override default values based on build status
+  if (buildStatus == 'STARTED') {
+    color = 'ORANGE'
+    colorCode = '#FFA500'
+  } else if (buildStatus == 'SUCCESSFUL') {
+    color = 'GREEN'
+    colorCode = '#00FF00'
+  } else {
+    color = 'RED'
+    colorCode = '#FF0000'
+  }
+
+  // Send notifications
+  slackSend (color: colorCode, message: summary)
+}

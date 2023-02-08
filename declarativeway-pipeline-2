@@ -7,18 +7,6 @@ parameters {
 }
 
 
-triggers {
-  pollSCM ('* * * * *')
-  cron ('* * * * *')
-}
- 
-
-options {
-  buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
-  timestamps()
-}
-
-
 tools{
 maven "maven3.8.7"
 }

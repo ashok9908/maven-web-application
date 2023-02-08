@@ -2,6 +2,11 @@ pipeline{
 
 agent any
 
+parameters {
+  choice choices: ['master', 'development', 'qa'], description: 'Branch Creation', name: 'BuildName'
+}
+
+
 triggers {
   pollSCM ('* * * * *')
   cron ('* * * * *')
@@ -24,7 +29,7 @@ stages{
 stage('Checkout code'){
 steps{
 slacknotifications("STARTED")
-git credentialsId: 'b15aaeac-ec99-496d-be5f-2ccf3eac7ea5', url: 'https://github.com/ashok9908/maven-web-application.git'
+git branch: "${params.BranchName}", credentialsId: 'b15aaeac-ec99-496d-be5f-2ccf3eac7ea5', url: 'https://github.com/ashok9908/maven-web-application.git'
 }
 }
 

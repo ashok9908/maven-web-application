@@ -4,6 +4,11 @@ pipeline{
 
 agent any
 
+parameters {
+  choice choices: ['development', 'master', 'qa'], description: 'Building Branch', name: 'BranchName'
+}
+
+
 tools{
 maven "maven3.8.7"
 }
@@ -25,7 +30,7 @@ stages{
  stage('checkoutcode'){
  steps{
      slacknotifications("STARTED")
- git credentialsId: 'b15aaeac-ec99-496d-be5f-2ccf3eac7ea5', url: 'https://github.com/ashok9908/maven-web-application.git'
+ git branch: "${params.BranchName}" credentialsId: 'b15aaeac-ec99-496d-be5f-2ccf3eac7ea5', url: 'https://github.com/ashok9908/maven-web-application.git'
  }
  }
 

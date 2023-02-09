@@ -15,7 +15,7 @@ maven "maven3.8.7"
 
 triggers {
   pollSCM ('* * * * *')
-     //cron ('* * * * *')
+   //cron ('* * * * *')
 }
 
 options {

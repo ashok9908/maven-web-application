@@ -1,6 +1,10 @@
 pipeline{
  
-agent any
+//agent any
+
+agent{
+lable "nodes"
+}
 
 parameters {
   choice choices: ['devlopment', 'master', 'qa'], description: 'Getting BranchName', name: 'BranchName'
@@ -56,7 +60,7 @@ stages{
  stage('DeployAppintoTomcat'){
  steps{
  sshagent(['6a39e6c8-4576-4fd3-8c77-d00d4ad42a86']){
- sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@13.126.210.245:/opt/apache-tomcat-9.0.71/webapps/"
+ sh "scp -o StrictHostKeyChecking=no target/maven-web-application.war ec2-user@65.2.6.162:/opt/apache-tomcat-9.0.71/webapps/"
  }
  }
  }

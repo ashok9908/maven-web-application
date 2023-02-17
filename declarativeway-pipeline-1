@@ -7,7 +7,7 @@ label "nodes"
 }
 
 parameters {
-  choice choices: ['devlopment', 'master', 'qa'], description: 'Getting BranchName', name: 'BranchName'
+  choice choices: ['master', 'development', 'qa'], description: 'Getting BranchName', name: 'BranchName'
 }
 
 tools{
